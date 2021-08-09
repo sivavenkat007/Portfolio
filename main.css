@@ -94,6 +94,37 @@ img.animated-gif {
   width: 48px;
   height: auto;
 }
+
+.checked {
+  color: orange;
+}
+.fa-star-half-o {
+  color: orange;
+}
+.fa-star-o {
+  color: orange;
+}
+
+.button {
+  display: inline-block;
+  height: 60px;
+  width: 50px;
+  background: transparent;
+  overflow: hidden;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease-out;
+}
+
+.button:hover {
+  width: 220px;
+}
+
+.button span {
+  font-size: 22px;
+  font-weight: 500;
+  vertical-align: 16px;
+}
 /*End global*/
 
 /*Start reusable*/
