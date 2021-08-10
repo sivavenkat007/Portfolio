@@ -1,16 +1,16 @@
 @import url(https://db.onlinewebfonts.com/c/0923ee644c97a87d70269aa80a6f1e79?family=The+Historia+Demo);
 @font-face {
   font-family: "The Historia Demo";
-  src: url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.eot");
-  src: url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.eot?#iefix")
+  src: url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.eot");
+  src: url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.eot?#iefix")
       format("embedded-opentype"),
-    url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.woff2")
+    url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.woff2")
       format("woff2"),
-    url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.woff")
+    url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.woff")
       format("woff"),
-    url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.ttf")
+    url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.ttf")
       format("truetype"),
-    url("https://db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.svg#The Historia Demo")
+    url("//db.onlinewebfonts.com/t/0923ee644c97a87d70269aa80a6f1e79.svg#The Historia Demo")
       format("svg");
 }
 
@@ -295,7 +295,7 @@ li {
 
 .landing-text h1 {
   font-size: 20rem;
-  font-family: "The Historia Demo", sans-serif;
+  font-family: "Gotham Medium", sans-serif;
   background: linear-gradient(#f0c800ce, #ff5a3dcb);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
