@@ -15,7 +15,7 @@
 
   // Seasonal ambience follows the Indian calendar, not live weather or visitor location.
   function monthIST(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",month:"numeric"}).formatToParts(new Date());return Number(p.find(x=>x.type==="month")?.value||new Date().getMonth()+1);}
-  function season(){const m=monthIST();const s=m>=3&&m<=5?"summer":m>=6&&m<=9?"monsoon":m===12||m<=2?"winter":"autumn";document.body.dataset.season=s;
+  let currentSeason="autumn";\n  function season(){const m=monthIST();const s=m>=3&&m<=5?"summer":m>=6&&m<=9?"monsoon":m===12||m<=2?"winter":"autumn";currentSeason=s;document.body.dataset.season=s;
     const labels={summer:"Summer light",monsoon:"Monsoon showers",winter:"Winter sparkle",autumn:"Autumn breeze"};
     const moods={summer:"A little warm. Toffee is looking for some shade.",monsoon:"A drizzle! Toffee found a leaf for shelter.",winter:"Brrr! Toffee is shaking off a few snowflakes.",autumn:"A few leaves are falling. Shall we explore?"};
     if($("#seasonText"))$("#seasonText").textContent=labels[s]+" · India";
@@ -23,6 +23,23 @@
     if($("#toffeeMood"))$("#toffeeMood").textContent=moods[s];
   }
   season();window.setInterval(season,60000);
+  // Toffee animates independently of scrolling: walk, climb, swing, pause, then react to the season.
+  const toffeeSprite=$("#toffeeSprite");
+  const toffeeRoutine=["walk","climb","swing","curious","idle"];
+  let toffeeStep=0;
+  function animateToffee(){
+    if(!toffeeSprite)return;
+    const seasonalPose={summer:"summer",monsoon:"rain",winter:"winter",autumn:"curious"};
+    const pose=toffeeStep%6===5?seasonalPose[currentSeason]:toffeeRoutine[toffeeStep%5];
+    toffeeSprite.className="toffee-sprite pose-"+pose;
+    toffeeStep++;
+  }
+  animateToffee();
+  if(!reduced)window.setInterval(animateToffee,3200);
+  // Siva strolls around the hero scene and turns at the end of each patrol.
+  const avatarWalker=$("#avatarWalker");
+  if(avatarWalker&&!reduced)window.setInterval(()=>avatarWalker.classList.toggle("is-facing-left"),26000);
+  if(avatarWalker&&reduced){const avatarImage=$("img",avatarWalker);if(avatarImage)avatarImage.src="assets/avatar.webp";}
 
   // Scroll progress, current navigation highlight and Toffee's branch route.
   const ids=["home","about","highlights","experience","skills","projects","garage","arcade","education","contact"];
@@ -33,9 +50,9 @@
     const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){active=entry.target.id;links.forEach(a=>a.classList.toggle("is-current",a.getAttribute("href")==="#"+active));}}),{rootMargin:"-28% 0px -58% 0px",threshold:0});
     sections.forEach(s=>observer.observe(s));
   }
-  const fill=$(".reading-progress span"),route=$("#monkeyRoute"),monkey=$("#monkeyGuide");
+  const fill=$(".reading-progress span");
   let pending=false;
-  function updateScroll(){const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight),pct=Math.max(0,Math.min(1,window.scrollY/max));if(fill)fill.style.width=(pct*100)+"%";if(route&&monkey)monkey.style.top=(pct*Math.max(0,route.clientHeight-monkey.offsetHeight))+"px";pending=false;}
+  function updateScroll(){const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight),pct=Math.max(0,Math.min(1,window.scrollY/max));if(fill)fill.style.width=(pct*100)+"%";pending=false;}
   window.addEventListener("scroll",()=>{if(!pending){requestAnimationFrame(updateScroll);pending=true;}},{passive:true});
   window.addEventListener("resize",updateScroll);window.addEventListener("load",updateScroll);updateScroll();
   const bubble=$("#monkeyBubble");
