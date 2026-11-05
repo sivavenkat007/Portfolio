@@ -44,7 +44,7 @@
 
   // Skill group highlighting.
   const cards=$$(".skills-grid .skill-card"),filters=$$(".skill-filter");
-  function category(card){const t=card.innerText.toLowerCase();if(/claude|mcp|ai-assisted/.test(t))return"ai";if(/jenkins|github actions|gitlab ci|artifactory|ci\\/cd/.test(t))return"cicd";if(/pytest|playwright|robot framework|appium|selenium|automation/.test(t))return"automation";if(/docker|podman|linux|windows|macos|vmware|operating systems/.test(t))return"platforms";if(/rest api|backend|database|mysql|mongodb|api integration/.test(t))return"backend";return"python";}
+  function category(card){const t=card.innerText.toLowerCase();if(/claude|mcp|ai-assisted/.test(t))return"ai";if(/jenkins|github actions|gitlab ci|artifactory/.test(t)||t.includes("ci/cd"))return"cicd";if(/pytest|playwright|robot framework|appium|selenium|automation/.test(t))return"automation";if(/docker|podman|linux|windows|macos|vmware|operating systems/.test(t))return"platforms";if(/rest api|backend|database|mysql|mongodb|api integration/.test(t))return"backend";return"python";}
   cards.forEach(c=>c.dataset.skillCategory=category(c));
   filters.forEach(btn=>btn.addEventListener("click",()=>{const f=btn.dataset.skillFilter;filters.forEach(b=>b.classList.toggle("is-active",b===btn));cards.forEach(c=>{const match=f==="all"||c.dataset.skillCategory===f;c.classList.toggle("is-dimmed",!match);c.classList.toggle("is-highlighted",match&&f!=="all");});}));
 
@@ -84,7 +84,7 @@
 
   // Open one game at a time. Tetris starts only after the visitor presses Start.
   const stage=$("#gameStage"),ticPanel=$("#ticPanel"),tetrisPanel=$("#tetrisPanel");
-  function openGame(which){if(!stage)return;stage.hidden=false;const tic=which==="tic";ticPanel.hidden=!tic;tetrisPanel.hidden=tic;$("#gameTitle").textContent=tic?"Tic Tac Toe":"Tetris Mini";stage.scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest"});if(!tic)resetTetris();}
+  function openGame(which){if(!stage)return;const tic=which==="tic";if(tic)pause();stage.hidden=false;ticPanel.hidden=!tic;tetrisPanel.hidden=tic;$("#gameTitle").textContent=tic?"Tic Tac Toe":"Tetris Mini";stage.scrollIntoView({behavior:reduced?"auto":"smooth",block:"nearest"});if(!tic)resetTetris();}
   $$("[data-open-game]").forEach(b=>b.addEventListener("click",()=>openGame(b.dataset.openGame)));
   $("#closeGame")?.addEventListener("click",()=>{stage.hidden=true;pause();});
   document.addEventListener("visibilitychange",()=>{if(document.hidden)pause();});
