@@ -15,7 +15,8 @@
 
   // Seasonal ambience follows the Indian calendar, not live weather or visitor location.
   function monthIST(){const p=new Intl.DateTimeFormat("en-US",{timeZone:"Asia/Kolkata",month:"numeric"}).formatToParts(new Date());return Number(p.find(x=>x.type==="month")?.value||new Date().getMonth()+1);}
-  let currentSeason="autumn";\n  function season(){const m=monthIST();const s=m>=3&&m<=5?"summer":m>=6&&m<=9?"monsoon":m===12||m<=2?"winter":"autumn";currentSeason=s;document.body.dataset.season=s;
+  let currentSeason="autumn";
+  function season(){const m=monthIST();const s=m>=3&&m<=5?"summer":m>=6&&m<=9?"monsoon":m===12||m<=2?"winter":"autumn";currentSeason=s;document.body.dataset.season=s;
     const labels={summer:"Summer light",monsoon:"Monsoon showers",winter:"Winter sparkle",autumn:"Autumn breeze"};
     const moods={summer:"A little warm. Toffee is looking for some shade.",monsoon:"A drizzle! Toffee found a leaf for shelter.",winter:"Brrr! Toffee is shaking off a few snowflakes.",autumn:"A few leaves are falling. Shall we explore?"};
     if($("#seasonText"))$("#seasonText").textContent=labels[s]+" · India";
@@ -55,6 +56,7 @@
   function updateScroll(){const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight),pct=Math.max(0,Math.min(1,window.scrollY/max));if(fill)fill.style.width=(pct*100)+"%";pending=false;}
   window.addEventListener("scroll",()=>{if(!pending){requestAnimationFrame(updateScroll);pending=true;}},{passive:true});
   window.addEventListener("resize",updateScroll);window.addEventListener("load",updateScroll);updateScroll();
+  const monkey=$("#monkeyGuide");
   const bubble=$("#monkeyBubble");
   function nextSection(){const i=sections.findIndex(s=>s.id===active),target=sections[Math.min(Math.max(0,i)+1,sections.length-1)];if(target)target.scrollIntoView({behavior:reduced?"auto":"smooth",block:"start"});}
   if(monkey&&bubble){monkey.addEventListener("click",()=>{bubble.hidden=!bubble.hidden;});$("#monkeyNext")?.addEventListener("click",()=>{bubble.hidden=true;nextSection();});document.addEventListener("click",e=>{if(!bubble.hidden&&!bubble.contains(e.target)&&!monkey.contains(e.target))bubble.hidden=true;});}
