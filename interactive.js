@@ -24,27 +24,78 @@
     if($("#toffeeMood"))$("#toffeeMood").textContent=moods[s];
   }
   season();window.setInterval(season,60000);
-  // Toffee animates independently of scrolling: walk, climb, swing, pause, then react to the season.
+  // Page-wide character movement is initialized after section anchors are collected.
   const toffeeSprite=$("#toffeeSprite");
-  const toffeeRoutine=["walk","climb","swing","curious","idle"];
-  let toffeeStep=0;
-  function animateToffee(){
-    if(!toffeeSprite)return;
-    const seasonalPose={summer:"summer",monsoon:"rain",winter:"winter",autumn:"curious"};
-    const pose=toffeeStep%6===5?seasonalPose[currentSeason]:toffeeRoutine[toffeeStep%5];
-    toffeeSprite.className="toffee-sprite pose-"+pose;
-    toffeeStep++;
-  }
-  animateToffee();
-  if(!reduced)window.setInterval(animateToffee,3200);
-  // Siva strolls around the hero scene and turns at the end of each patrol.
-  const avatarWalker=$("#avatarWalker");
-  if(avatarWalker&&!reduced)window.setInterval(()=>avatarWalker.classList.toggle("is-facing-left"),26000);
-  if(avatarWalker&&reduced){const avatarImage=$("img",avatarWalker);if(avatarImage)avatarImage.src="assets/avatar.webp";}
+  const sivaRoamer=$("#sivaRoamer");
+  const toffeeRoamer=$("#monkeyGuide");
+  let currentToffeePose=0;
+  const toffeePoses=["walk","climb","swing","curious","idle"];
+  const seasonalToffeePose={summer:"summer",monsoon:"rain",winter:"winter",autumn:"curious"};
+  let sivaWanderStep=0;
+  let toffeeWanderStep=0;
 
   // Scroll progress, current navigation highlight and Toffee's branch route.
   const ids=["home","about","highlights","experience","skills","projects","garage","arcade","education","contact"];
   const sections=ids.map(id=>document.getElementById(id)).filter(Boolean);
+  // The characters travel between section waypoints across the entire site, not inside the hero.
+  const sivaWaypoints=[
+    {x:.075,y:.78},{x:.91,y:.79},{x:.075,y:.80},{x:.91,y:.79},{x:.075,y:.78},
+    {x:.91,y:.80},{x:.075,y:.79},{x:.91,y:.78},{x:.075,y:.79},{x:.91,y:.78}
+  ];
+  const toffeeWaypoints=[
+    {x:.91,y:.24},{x:.075,y:.30},{x:.91,y:.36},{x:.075,y:.25},{x:.91,y:.33},
+    {x:.075,y:.40},{x:.91,y:.27},{x:.075,y:.34},{x:.91,y:.42},{x:.075,y:.29}
+  ];
+  const sivaDrift=[0,42,-22,34,-8];
+  const toffeeDrift=[0,36,-32,23,-15];
+  const toffeeLift=[0,-38,26,-24,18];
+  function sectionRoute(waypoints, scrollY){
+    if(!sections.length) return {x:waypoints[0].x,y:waypoints[0].y,dx:0};
+    const tops=sections.map(section=>section.getBoundingClientRect().top+window.scrollY);
+    const reference=scrollY+Math.min(window.innerHeight*.34,240);
+    let index=0;
+    while(index<tops.length-2 && reference>tops[index+1]) index++;
+    const next=Math.min(index+1,waypoints.length-1);
+    const span=Math.max(1,(tops[next]??(tops[index]+1))-tops[index]);
+    const amount=Math.max(0,Math.min(1,(reference-tops[index])/span));
+    const a=waypoints[Math.min(index,waypoints.length-1)];
+    const b=waypoints[next]||a;
+    return {x:a.x+(b.x-a.x)*amount,y:a.y+(b.y-a.y)*amount,dx:b.x-a.x};
+  }
+  function setWorldPosition(element, point, driftX, driftY, minY, maxY, size){
+    if(!element) return;
+    const width=window.innerWidth,height=window.innerHeight;
+    const x=Math.max(size*.52,Math.min(width-size*.52,point.x*width+driftX));
+    const y=Math.max(minY,Math.min(height-maxY,point.y*height+driftY));
+    element.style.left=x+"px";
+    element.style.top=y+"px";
+  }
+  function updateCharacterWorld(){
+    const scrollY=window.scrollY||window.pageYOffset||0;
+    const siva=sectionRoute(sivaWaypoints,scrollY);
+    const toffee=sectionRoute(toffeeWaypoints,scrollY);
+    const mobile=window.innerWidth<=640;
+    setWorldPosition(sivaRoamer,siva,sivaDrift[sivaWanderStep],0,mobile?115:125,mobile?85:105,mobile?78:130);
+    setWorldPosition(toffeeRoamer,toffee,toffeeDrift[toffeeWanderStep],toffeeLift[toffeeWanderStep],mobile?100:105,mobile?90:100,mobile?70:96);
+    if(sivaRoamer) sivaRoamer.classList.toggle("faces-left",siva.dx<0);
+    if(toffeeRoamer) toffeeRoamer.classList.toggle("faces-left",toffee.dx<0);
+  }
+  function animateToffee(){
+    if(!toffeeSprite)return;
+    const pose=currentToffeePose%6===5?seasonalToffeePose[currentSeason]:toffeePoses[currentToffeePose%5];
+    toffeeSprite.className="toffee-sprite pose-"+pose;
+    currentToffeePose++;
+  }
+  function wanderCharacters(){
+    sivaWanderStep=(sivaWanderStep+1)%sivaDrift.length;
+    toffeeWanderStep=(toffeeWanderStep+1)%toffeeDrift.length;
+    updateCharacterWorld();
+    animateToffee();
+  }
+  animateToffee();
+  updateCharacterWorld();
+  window.setInterval(wanderCharacters,2600);
+
   const links=$$("#primary-navigation a[href^='#']");
   let active="home";
   if("IntersectionObserver" in window){
@@ -52,6 +103,17 @@
     sections.forEach(s=>observer.observe(s));
   }
   const fill=$(".reading-progress span");
+  let characterScrollPending=false;
+  function requestCharacterUpdate(){
+    if(characterScrollPending)return;
+    characterScrollPending=true;
+    window.requestAnimationFrame(()=>{updateCharacterWorld();characterScrollPending=false;});
+  }
+  window.addEventListener("scroll",requestCharacterUpdate,{passive:true});
+  window.addEventListener("resize",requestCharacterUpdate);
+  window.addEventListener("load",requestCharacterUpdate);
+  window.addEventListener("pageshow",requestCharacterUpdate);
+
   let pending=false;
   function updateScroll(){const max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight),pct=Math.max(0,Math.min(1,window.scrollY/max));if(fill)fill.style.width=(pct*100)+"%";pending=false;}
   window.addEventListener("scroll",()=>{if(!pending){requestAnimationFrame(updateScroll);pending=true;}},{passive:true});

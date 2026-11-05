@@ -84,3 +84,95 @@ body[data-season="winter"] .monkey-guide img{animation:monkeyCold 2s ease-in-out
   .monkey-guide{top:35%!important;left:5px!important}
   .toffee-sprite.pose-walk{background-position:0 0}
 }
+
+/* Page-wide character world: the mascots travel between every section */
+.hero-characters{display:flex;align-items:center;justify-content:flex-end;min-height:72px;height:auto;padding:12px 0;overflow:visible}
+.hero-characters .character-note{position:relative;right:auto;bottom:auto}
+.character-world{position:fixed;inset:0;z-index:36;pointer-events:none;overflow:hidden;isolation:isolate}
+.world-branches{position:absolute;inset:0;width:100%;height:100%;opacity:.58;overflow:visible}
+.world-branch{fill:none;stroke:rgba(118,177,135,.43);stroke-width:1.2;stroke-linecap:round;filter:drop-shadow(0 0 5px rgba(117,215,166,.12))}
+.world-twig{fill:none;stroke:rgba(118,177,135,.38);stroke-width:.85;stroke-linecap:round}
+.world-leaves{fill:rgba(100,166,115,.16);stroke:rgba(142,202,151,.47);stroke-width:.7;stroke-linejoin:round}
+.siva-roamer{position:absolute;left:0;top:0;z-index:2;width:132px;height:164px;display:flex;align-items:center;justify-content:center;transform:translate(-50%,-50%);transition:left .78s cubic-bezier(.2,.75,.25,1),top .78s cubic-bezier(.2,.75,.25,1);pointer-events:none;filter:drop-shadow(0 8px 13px rgba(0,0,0,.28))}
+.siva-roamer img{display:block;width:112px;height:148px;object-fit:contain;object-position:center bottom;background:transparent;animation:sivaBodyBob 1.05s ease-in-out infinite;will-change:transform}
+.siva-roamer.faces-left img{scale:-1 1}
+.character-tag{position:absolute;bottom:3px;left:50%;transform:translateX(-50%);padding:4px 8px;border:1px solid rgba(117,215,166,.28);border-radius:99px;background:rgba(8,18,21,.9);color:#c5dfce;font:700 8px ui-monospace,monospace;white-space:nowrap;box-shadow:0 5px 18px rgba(0,0,0,.2)}
+.character-tag i{margin-left:4px;color:var(--leaf);font-style:normal}
+.monkey-guide{position:absolute;left:0;top:0;z-index:4;width:112px;height:118px;padding:0;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:translate(-50%,-50%);transition:left .72s cubic-bezier(.2,.75,.25,1),top .72s cubic-bezier(.2,.75,.25,1);pointer-events:auto;cursor:pointer;filter:drop-shadow(0 8px 10px rgba(0,0,0,.24))}
+.monkey-guide:focus-visible{outline:2px solid var(--leaf);outline-offset:2px;border-radius:22px}
+.toffee-sprite{display:block;width:96px;height:96px;flex:0 0 96px;background-image:url('assets/toffee-poses.webp');background-size:384px 192px;background-repeat:no-repeat;background-position:0 0;filter:drop-shadow(0 5px 7px rgba(0,0,0,.16));will-change:transform,background-position}
+.toffee-sprite.pose-walk{background-position:0 0;animation:toffeeWalkFrames .52s steps(1,end) infinite}
+.toffee-sprite.pose-idle{background-position:0 -96px;animation:toffeeIdleLoop 2.4s ease-in-out infinite}
+.toffee-sprite.pose-climb{background-position:-192px 0;animation:toffeeClimbLoop .9s ease-in-out infinite}
+.toffee-sprite.pose-swing{background-position:-288px 0;animation:toffeeSwingLoop 1.45s ease-in-out infinite}
+.toffee-sprite.pose-curious{background-position:0 -96px;animation:toffeeCuriousLoop 2.1s ease-in-out infinite}
+.toffee-sprite.pose-summer{background-position:-96px -96px;animation:toffeeSummerLoop 2.2s ease-in-out infinite}
+.toffee-sprite.pose-rain{background-position:-192px -96px;animation:toffeeRainLoop 2.1s ease-in-out infinite}
+.toffee-sprite.pose-winter{background-position:-288px -96px;animation:toffeeWinterLoop 1.8s ease-in-out infinite}
+.monkey-guide.faces-left .toffee-sprite{scale:-1 1}
+.monkey-spark{position:absolute;top:7px;right:5px;color:#c1f0c7;font-size:15px;animation:toffeeSpark 2s ease-in-out infinite}
+.toffee-label{margin-top:-4px;padding:3px 7px;border:1px solid rgba(117,215,166,.27);border-radius:99px;background:rgba(8,18,21,.88);color:#bfe1ca;font:700 8px ui-monospace,monospace;letter-spacing:.13em}
+.monkey-bubble{position:fixed;z-index:901;top:42vh;right:118px;width:190px;padding:13px;border:1px solid rgba(117,215,166,.36);border-radius:14px;background:rgba(9,21,23,.97);box-shadow:0 12px 34px rgba(0,0,0,.3);pointer-events:auto}
+.monkey-bubble[hidden]{display:none}
+.monkey-bubble strong,.monkey-bubble span{display:block}
+.monkey-bubble strong{color:#d6f1de;font-size:11px}
+.monkey-bubble span{margin:4px 0 9px;color:#96b1a2;font-size:9px;line-height:1.5}
+.monkey-bubble button{padding:6px 9px;border:1px solid rgba(117,215,166,.3);border-radius:8px;background:rgba(117,215,166,.08);color:#bce7c7;font-size:9px;cursor:pointer}
+@keyframes sivaBodyBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes toffeeWalkFrames{0%,49%{background-position:0 0}50%,100%{background-position:-96px 0}}
+@keyframes toffeeIdleLoop{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(2deg)}}
+@keyframes toffeeClimbLoop{0%,100%{transform:translateY(3px) rotate(-5deg)}50%{transform:translateY(-7px) rotate(3deg)}}
+@keyframes toffeeSwingLoop{0%,100%{transform:rotate(-11deg) translateY(0)}50%{transform:rotate(11deg) translateY(-5px)}}
+@keyframes toffeeCuriousLoop{0%,100%{transform:rotate(0)}30%{transform:rotate(-7deg)}70%{transform:rotate(7deg)}}
+@keyframes toffeeSummerLoop{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-4px) rotate(3deg)}}
+@keyframes toffeeRainLoop{0%,100%{transform:translateY(2px) rotate(-4deg)}50%{transform:translateY(4px) rotate(4deg)}}
+@keyframes toffeeWinterLoop{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(2px) rotate(-5deg)}75%{transform:translateY(1px) rotate(5deg)}}
+@keyframes toffeeSpark{0%,100%{opacity:.35;transform:scale(.85)}50%{opacity:1;transform:scale(1.12)}}
+@media(max-width:820px){
+  .siva-roamer{width:104px;height:136px}.siva-roamer img{width:92px;height:120px}
+  .monkey-guide{width:92px;height:100px}.toffee-sprite{width:80px;height:80px;flex-basis:80px;background-size:320px 160px}
+  .toffee-sprite.pose-walk{animation:toffeeWalkFramesTablet .52s steps(1,end) infinite}
+  .toffee-sprite.pose-idle{background-position:0 -80px}.toffee-sprite.pose-climb{background-position:-160px 0}.toffee-sprite.pose-swing{background-position:-240px 0}
+  .toffee-sprite.pose-curious{background-position:0 -80px}.toffee-sprite.pose-summer{background-position:-80px -80px}.toffee-sprite.pose-rain{background-position:-160px -80px}.toffee-sprite.pose-winter{background-position:-240px -80px}
+  .monkey-bubble{right:92px}
+}
+@keyframes toffeeWalkFramesTablet{0%,49%{background-position:0 0}50%,100%{background-position:-80px 0}}
+@media(max-width:600px){
+  .character-world{opacity:.97}
+  .siva-roamer{width:82px;height:112px}.siva-roamer img{width:76px;height:100px}
+  .character-tag{font-size:7px;padding:3px 6px}
+  .monkey-guide{width:78px;height:88px}.toffee-sprite{width:68px;height:68px;flex-basis:68px;background-size:272px 136px}
+  .toffee-sprite.pose-walk{animation:toffeeWalkFramesMobile .52s steps(1,end) infinite}
+  .toffee-sprite.pose-idle{background-position:0 -68px}.toffee-sprite.pose-climb{background-position:-136px 0}.toffee-sprite.pose-swing{background-position:-204px 0}
+  .toffee-sprite.pose-curious{background-position:0 -68px}.toffee-sprite.pose-summer{background-position:-68px -68px}.toffee-sprite.pose-rain{background-position:-136px -68px}.toffee-sprite.pose-winter{background-position:-204px -68px}
+  .toffee-label{font-size:7px;padding:2px 5px}
+  .monkey-bubble{top:auto;bottom:112px;right:14px;width:172px}
+  .world-branches{opacity:.34}
+}
+@keyframes toffeeWalkFramesMobile{0%,49%{background-position:0 0}50%,100%{background-position:-68px 0}}
+
+/* Use real animated WebP frames for Toffee; CSS controls his action and reactions. */
+.toffee-sprite{
+  display:block;width:92px;height:92px;flex:0 0 92px;object-fit:contain;
+  background:none!important;background-image:none!important;background-size:contain!important;
+  filter:drop-shadow(0 5px 7px rgba(0,0,0,.2));transform-origin:50% 82%;
+  will-change:transform;
+}
+.toffee-sprite.pose-walk{animation:toffeeWalkBounce .46s ease-in-out infinite}
+.toffee-sprite.pose-idle{animation:toffeeIdleAction 2.5s ease-in-out infinite}
+.toffee-sprite.pose-climb{animation:toffeeClimbAction .92s ease-in-out infinite}
+.toffee-sprite.pose-swing{animation:toffeeSwingAction 1.42s ease-in-out infinite}
+.toffee-sprite.pose-curious{animation:toffeeCuriousAction 2s ease-in-out infinite}
+.toffee-sprite.pose-summer{animation:toffeeSummerAction 2.3s ease-in-out infinite}
+.toffee-sprite.pose-rain{animation:toffeeRainAction 2.1s ease-in-out infinite}
+.toffee-sprite.pose-winter{animation:toffeeWinterAction 1.8s ease-in-out infinite}
+@keyframes toffeeWalkBounce{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-5px) rotate(2deg)}}
+@keyframes toffeeIdleAction{0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-3px) rotate(2deg)}}
+@keyframes toffeeClimbAction{0%,100%{transform:translateY(4px) rotate(-9deg)}50%{transform:translateY(-7px) rotate(8deg)}}
+@keyframes toffeeSwingAction{0%,100%{transform:rotate(-13deg) translateY(0)}50%{transform:rotate(13deg) translateY(-5px)}}
+@keyframes toffeeCuriousAction{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg)}70%{transform:rotate(8deg)}}
+@keyframes toffeeSummerAction{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-3px) rotate(3deg)}}
+@keyframes toffeeRainAction{0%,100%{transform:translateY(2px) rotate(-5deg)}50%{transform:translateY(4px) rotate(5deg)}}
+@keyframes toffeeWinterAction{0%,100%{transform:translateY(0) rotate(0)}25%{transform:translateY(2px) rotate(-7deg)}75%{transform:translateY(1px) rotate(7deg)}}
+@media(max-width:820px){.toffee-sprite{width:78px;height:78px;flex-basis:78px}}
+@media(max-width:600px){.toffee-sprite{width:66px;height:66px;flex-basis:66px}}
